@@ -2,11 +2,14 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <StartupObject>DirectSSTPTester.Program</StartupObject>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+    <Version>$(VersionPrefix)1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

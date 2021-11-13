@@ -27,8 +27,7 @@ namespace DirectSSTPTester
             }
             SearchGhost();
 
-            Assembly myAssembly = Assembly.GetEntryAssembly();
-            string iconPath = myAssembly.Location;
+            string iconPath = Environment.ProcessPath;
             Icon ico = Icon.ExtractAssociatedIcon(iconPath);
             this.Icon = ico;
         }
