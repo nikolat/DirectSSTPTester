@@ -4,7 +4,7 @@ using SSTPLib;
 using System.IO;
 using System.Text;
 using System.Drawing;
-using System.Reflection;
+using System.Collections.Generic;
 
 namespace DirectSSTPTester
 {
@@ -20,8 +20,12 @@ namespace DirectSSTPTester
             if (System.IO.File.Exists(txtPath))
             {
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                System.IO.StreamReader sr = new StreamReader(txtPath, Encoding.GetEncoding("Shift_JIS"));
+                System.IO.StreamReader sr = new StreamReader(txtPath, Encoding.GetEncoding("UTF-8"));
                 string s = sr.ReadToEnd();
+                sr.Close();
+                string charset = getEncoding(s);
+                sr = new StreamReader(txtPath, Encoding.GetEncoding(charset));
+                s = sr.ReadToEnd();
                 sr.Close();
                 this.textBoxMessageToSend.Text = s;
             }
@@ -105,11 +109,39 @@ namespace DirectSSTPTester
                     continue;
                 }
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                System.IO.StreamReader sr = new StreamReader(d, Encoding.GetEncoding("Shift_JIS"));
+                System.IO.StreamReader sr = new StreamReader(d, Encoding.GetEncoding("UTF-8"));
                 string s = sr.ReadToEnd();
+                sr.Close();
+                string charset = getEncoding(s);
+                sr = new StreamReader(d, Encoding.GetEncoding(charset));
+                s = sr.ReadToEnd();
                 sr.Close();
                 this.textBoxMessageToSend.Text = s;
             }
+        }
+
+        private string getEncoding(string text)
+        {
+            List<string> msg = new List<string>(text.Split("\r\n"));
+            string charset = "";
+            foreach (string s in msg)
+            {
+                if (s.StartsWith("Charset: "))
+                {
+                    charset = s[9..];
+                    break;
+                }
+            }
+            System.Text.Encoding enc;
+            try
+            {
+                enc = System.Text.Encoding.GetEncoding(charset);
+            }
+            catch (ArgumentException)
+            {
+                charset = "UTF-8";
+            }
+            return charset;
         }
     }
 }

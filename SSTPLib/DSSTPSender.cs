@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -237,17 +238,31 @@ namespace SSTPLib {
         {
             uint hwnd;
             hwnd = m_fmo.GetGhostHWnd(ghost);
-            if (hwnd == 0)
-            {
+            if (hwnd == 0) {
                 hwnd = m_fmo.GetGhostHWnd(null);
             }
-            if (hwnd == 0)
-            {
+            if (hwnd == 0) {
                 return null;
             }
-            sstpmsg += "Charset: Shift_JIS\r\n";
-            Byte[] data = System.Text.Encoding.GetEncoding("Shift-JIS").GetBytes(sstpmsg);
-            return SendAndGetResultString((IntPtr)hwnd, data);
+            List<string> msg = new List<string>(sstpmsg.Split("\r\n"));
+            string charset = "";
+            foreach (string s in msg) {
+                if (s.StartsWith("Charset: ")) {
+                    charset = s[9..];
+                    break;
+                }
+            }
+            System.Text.Encoding enc;
+            try {
+                enc = System.Text.Encoding.GetEncoding(charset);
+            }
+            catch (ArgumentException) {
+                charset = "UTF-8";
+                enc = System.Text.Encoding.GetEncoding(charset);
+            }
+            Byte[] data = enc.GetBytes(sstpmsg);
+
+            return SendAndGetResultString((IntPtr)hwnd, data, charset);
         }
 
         /// <summary>
@@ -292,7 +307,7 @@ namespace SSTPLib {
         /// <param key="desthwnd">送信先のHWND</param>
         /// <param key="data">送信するデータ</param>
         /// <returns>SSTP送信の結果を返します</returns>
-        public string SendAndGetResultString(IntPtr desthwnd, Byte[] data)
+        public string SendAndGetResultString(IntPtr desthwnd, Byte[] data, string charset)
         {
             bool result = DSSTPSender.SendWMCopyData(desthwnd, m_frmMsgReceiver.Handle, data, this.SendMessageTimeOut);
             if (!result)
@@ -304,7 +319,7 @@ namespace SSTPLib {
             {
                 return null;
             }
-            m_result = System.Text.Encoding.GetEncoding("Shift-JIS").GetString(m_frmMsgReceiver.m_recvdata);
+            m_result = System.Text.Encoding.GetEncoding(charset).GetString(m_frmMsgReceiver.m_recvdata);
             return this.Result;
         }
 
