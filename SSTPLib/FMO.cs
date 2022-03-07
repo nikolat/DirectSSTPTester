@@ -159,8 +159,14 @@ namespace SSTPLib {
                 UnLockFMO();
             }
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            System.Text.Encoding sjisenc = System.Text.Encoding.GetEncoding("Shift_JIS");
-            m_fmostring = sjisenc.GetString(data);
+            System.Text.Encoding enc;
+            if (this.FMOName == "SakuraUnicode")
+                enc = System.Text.Encoding.UTF8;
+            else
+                enc = System.Text.Encoding.GetEncoding(
+                    System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ANSICodePage
+                );
+            m_fmostring = enc.GetString(data);
             m_fmostring = m_fmostring.Replace("\r\n", "\n");
             m_fmostring = m_fmostring.Trim(new char[] { '\u0000', '\u0001', '\n' });
             return true;

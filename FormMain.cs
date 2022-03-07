@@ -44,7 +44,7 @@ namespace DirectSSTPTester
         private void SearchGhost()
         {
             this.comboBoxTargetName.Items.Clear();
-            SakuraFMO fmo = new SakuraFMO();
+            SakuraFMO fmo = new SakuraFMO("SakuraUnicode");
             fmo.Update(true);
             string[] names = fmo.GetGhostNames();
             if (names.Length > 0)
