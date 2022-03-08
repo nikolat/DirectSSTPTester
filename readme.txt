@@ -35,6 +35,7 @@
       http://creativecommons.org/publicdomain/zero/1.0/
 
 ■更新履歴
+2022/03/08  Ver1.3.0  ・ゴースト名取得時にSakuraUnicode FMOを使用
 2022/03/02  Ver1.2.0  ・SSTPプロトコル違反の修正、Shift_JIS以外の文字コード対応
 2021/11/13  Ver1.1.0  ・ターゲットフレームワークを.NET 6.0に変更
 2021/06/08  Ver1.0.0  ・新規作成
