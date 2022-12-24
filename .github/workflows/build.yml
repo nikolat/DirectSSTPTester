@@ -1,0 +1,27 @@
+name: Build
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: restore nuget
+        shell: cmd
+        run: |
+          nuget restore DirectSSTPTester.sln
+
+      - name: publish
+        run: |
+          dotnet publish --no-self-contained -p:Configuration=Release,PublishSingleFile=true -r win-x64
+          del bin/Release/net6.0-windows/win-x64/publish/DirectSSTPTester.pdb
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: DirectSSTPTester
+          path: bin/Release/net6.0-windows/win-x64/publish
