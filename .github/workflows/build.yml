@@ -18,10 +18,16 @@ jobs:
       - name: publish
         run: |
           dotnet publish --no-self-contained -p:Configuration=Release,PublishSingleFile=true -r win-x64
-          del bin/Release/net6.0-windows/win-x64/publish/DirectSSTPTester.pdb
+
+      - name: Prepare for Upload
+        run: |
+          mkdir artifacts
+          copy bin\Release\net7.0-windows\win-x64\publish\DirectSSTPTester.exe artifacts
+          copy readme.txt artifacts
+          copy sstp_sample\*.txt artifacts
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
         with:
           name: DirectSSTPTester
-          path: bin/Release/net6.0-windows/win-x64/publish
+          path: artifacts
