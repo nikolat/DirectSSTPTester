@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
-using SSTPLib;
 using System.IO;
 using System.Text;
 using System.Drawing;
 using System.Collections.Generic;
+using SSTPLib;
 
 namespace DirectSSTPTester
 {
@@ -17,17 +17,9 @@ namespace DirectSSTPTester
         private void FormMain_Load(object sender, EventArgs e)
         {
             string txtPath = "default.txt";
-            if (System.IO.File.Exists(txtPath))
+            if (File.Exists(txtPath))
             {
-                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                System.IO.StreamReader sr = new StreamReader(txtPath, Encoding.GetEncoding("UTF-8"));
-                string s = sr.ReadToEnd();
-                sr.Close();
-                string charset = getEncoding(s);
-                sr = new StreamReader(txtPath, Encoding.GetEncoding(charset));
-                s = sr.ReadToEnd();
-                sr.Close();
-                this.textBoxMessageToSend.Text = s;
+                this.textBoxMessageToSend.Text = GetText(txtPath);
             }
             SearchGhost();
 
@@ -36,7 +28,7 @@ namespace DirectSSTPTester
             this.Icon = ico;
         }
 
-        private void buttonRefreshFMO_Click(object sender, EventArgs e)
+        private void ButtonRefreshFMO_Click(object sender, EventArgs e)
         {
             SearchGhost();
         }
@@ -44,7 +36,7 @@ namespace DirectSSTPTester
         private void SearchGhost()
         {
             this.comboBoxTargetName.Items.Clear();
-            SakuraFMO fmo = new SakuraFMO("SakuraUnicode");
+            SakuraFMO fmo = new("SakuraUnicode");
             fmo.Update(true);
             string[] names = fmo.GetGhostNames();
             if (names.Length > 0)
@@ -54,13 +46,15 @@ namespace DirectSSTPTester
             }
         }
 
-        private void buttonSend_Click(object sender, EventArgs e)
+        private void ButtonSend_Click(object sender, EventArgs e)
         {
             string s = this.textBoxMessageToSend.Text;
             string t = this.comboBoxTargetName.Text;
-            DSSTPSender ds = new DSSTPSender();
-            ds.SendMessageTimeOut = 10000;
-            ds.RecvMessageTimeOut = 10000;
+            DSSTPSender ds = new()
+            {
+                SendMessageTimeOut = 10000,
+                RecvMessageTimeOut = 10000
+            };
             string r = ds.GetSSTPResponse(t, s);
             ds.Dispose();
             this.textBoxMessageReceived.Text = r;
@@ -71,7 +65,7 @@ namespace DirectSSTPTester
             Application.Exit();
         }
 
-        private void textBoxMessageToSend_DragEnter(object sender, DragEventArgs e)
+        private void TextBoxMessageToSend_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -80,7 +74,7 @@ namespace DirectSSTPTester
                 e.Effect = DragDropEffects.None;
                 foreach (string d in drags)
                 {
-                    if (!System.IO.File.Exists(d))
+                    if (!File.Exists(d))
                     {
                         // ファイル以外であればイベント・ハンドラを抜ける
                         return;
@@ -94,13 +88,13 @@ namespace DirectSSTPTester
             }
         }
 
-        private void textBoxMessageToSend_DragDrop(object sender, DragEventArgs e)
+        private void TextBoxMessageToSend_DragDrop(object sender, DragEventArgs e)
         {
             // ドラッグ＆ドロップされたファイル
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             foreach (string d in files)
             {
-                if (!System.IO.File.Exists(d))
+                if (!File.Exists(d))
                 {
                     continue;
                 }
@@ -108,21 +102,34 @@ namespace DirectSSTPTester
                 {
                     continue;
                 }
-                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                System.IO.StreamReader sr = new StreamReader(d, Encoding.GetEncoding("UTF-8"));
-                string s = sr.ReadToEnd();
-                sr.Close();
-                string charset = getEncoding(s);
-                sr = new StreamReader(d, Encoding.GetEncoding(charset));
-                s = sr.ReadToEnd();
-                sr.Close();
-                this.textBoxMessageToSend.Text = s;
+                this.textBoxMessageToSend.Text = GetText(d);
             }
         }
 
-        private string getEncoding(string text)
+        private static string GetText(string txtPath)
         {
-            List<string> msg = new List<string>(text.Split("\r\n"));
+            string charset = GetEncoding(txtPath);
+            StreamReader sr = new(txtPath, Encoding.GetEncoding(charset));
+            List<string> text = new();
+            string line;
+            while ((line = sr.ReadLine()) != null)
+            {
+                text.Add(line);
+            }
+            sr.Close();
+            return string.Join(Environment.NewLine, text.ToArray());
+        }
+
+        private static string GetEncoding(string txtPath)
+        {
+            StreamReader sr = new(txtPath, Encoding.GetEncoding("UTF-8"));
+            List<string> msg = new();
+            string line;
+            while ((line = sr.ReadLine()) != null)
+            {
+                msg.Add(line);
+            }
+            sr.Close();
             string charset = "";
             foreach (string s in msg)
             {
@@ -132,10 +139,10 @@ namespace DirectSSTPTester
                     break;
                 }
             }
-            System.Text.Encoding enc;
+            Encoding enc;
             try
             {
-                enc = System.Text.Encoding.GetEncoding(charset);
+                enc = Encoding.GetEncoding(charset);
             }
             catch (ArgumentException)
             {

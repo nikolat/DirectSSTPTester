@@ -46,8 +46,8 @@ namespace DirectSSTPTester
             this.textBoxMessageToSend.Name = "textBoxMessageToSend";
             this.textBoxMessageToSend.Size = new System.Drawing.Size(948, 346);
             this.textBoxMessageToSend.TabIndex = 0;
-            this.textBoxMessageToSend.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxMessageToSend_DragDrop);
-            this.textBoxMessageToSend.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxMessageToSend_DragEnter);
+            this.textBoxMessageToSend.DragDrop += new System.Windows.Forms.DragEventHandler(this.TextBoxMessageToSend_DragDrop);
+            this.textBoxMessageToSend.DragEnter += new System.Windows.Forms.DragEventHandler(this.TextBoxMessageToSend_DragEnter);
             // 
             // comboBoxTargetName
             // 
@@ -65,7 +65,7 @@ namespace DirectSSTPTester
             this.buttonRefreshFMO.TabIndex = 2;
             this.buttonRefreshFMO.Text = "更新";
             this.buttonRefreshFMO.UseVisualStyleBackColor = true;
-            this.buttonRefreshFMO.Click += new System.EventHandler(this.buttonRefreshFMO_Click);
+            this.buttonRefreshFMO.Click += new System.EventHandler(this.ButtonRefreshFMO_Click);
             // 
             // textBoxMessageReceived
             // 
@@ -88,7 +88,7 @@ namespace DirectSSTPTester
             this.buttonSend.TabIndex = 3;
             this.buttonSend.Text = "送信";
             this.buttonSend.UseVisualStyleBackColor = true;
-            this.buttonSend.Click += new System.EventHandler(this.buttonSend_Click);
+            this.buttonSend.Click += new System.EventHandler(this.ButtonSend_Click);
             // 
             // FormMain
             // 
