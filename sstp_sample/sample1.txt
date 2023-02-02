@@ -1,0 +1,7 @@
+NOTIFY SSTP/1.1
+Charset: UTF-8
+Sender: DirectSSTPTester
+Event: OnBeerShower
+Script: \h\s[5]すぽんっ！\w9\nぶしゅー。\w5ばしゃー。\w9\nどぼどぼどぼどぼ。\w9\w9\u\s[11]…\w5…\w5…\w5…\w5…。\e
+Option: notranslate
+

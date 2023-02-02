@@ -1,0 +1,8 @@
+NOTIFY SSTP/1.1
+Charset: UTF-8
+Sender: DirectSSTPTester
+Event: OnDive
+Reference0: 道頓堀
+Script: \h\s[5]どぼ～ん。\w9\w9\u\s[11]…\w5…\w5…\w5…\w5…。\e
+Option: notranslate
+

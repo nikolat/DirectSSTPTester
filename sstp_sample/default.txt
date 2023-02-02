@@ -1,0 +1,5 @@
+EXECUTE SSTP/1.1
+Charset: UTF-8
+Sender: DirectSSTPTester
+Command: GetProperty[baseware.version]
+
