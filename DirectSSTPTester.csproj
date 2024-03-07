@@ -2,18 +2,29 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <StartupObject>DirectSSTPTester.Program</StartupObject>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
-    <AssemblyVersion>1.4.0.0</AssemblyVersion>
-    <FileVersion>1.4.0.0</FileVersion>
+    <AssemblyVersion>1.5.0.0</AssemblyVersion>
+    <FileVersion>1.5.0.0</FileVersion>
     <Version>$(VersionPrefix)1.4.0</Version>
+    <PackageLicenseExpression>CC0-1.0</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="SSTPLib\**" />
+    <EmbeddedResource Remove="SSTPLib\**" />
+    <None Remove="SSTPLib\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="SSTPLib\SSTPLib.csproj" />
   </ItemGroup>
 
   <ItemGroup>
