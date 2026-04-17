@@ -20,7 +20,7 @@ namespace SSTPLib {
         /// <summary>
         /// アプリケーション名を取得します
         /// </summary>
-        public string AppicationName {
+        public string ApplicationName {
             get { return m_ApplicationName; }
         }
 
